@@ -1,0 +1,268 @@
+# Copyright 2024 Richard Kosegi
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+---
+openapi: 3.0.3
+info:
+  title: RouterOS to REST API bridge
+  description: |-
+    Perform operations on RouterOS-API enabled devices using REST API.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: v1.0.0
+
+servers:
+  - url: '{protocol}://{host}:{port}/api/v1'
+    variables:
+      host:
+        default: localhost
+        description: Hostname of API server.
+      port:
+        default: '22003'
+        description: Port on which API server is listening.
+      protocol:
+        default: http
+        description: The protocol for accessing the API.
+tags:
+  - name: configuration
+    description: Configuration related operations
+  - name: data
+    description: Data operations
+paths:
+  /config/devices:
+    get:
+      summary: List all configured devices
+      description: Get list of all configured devices
+      responses:
+        '200':
+          description: List of devices
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceList"
+      operationId: listDevices
+      tags:
+        - configuration
+  /config/aliases:
+    get:
+      summary: List all configured aliases
+      description: Get list of all configured aliases
+      responses:
+        '200':
+          description: List of aliases
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AliasList"
+      operationId: listAliases
+      tags:
+        - configuration
+  /data/{device}/{alias}:
+    parameters:
+      - $ref: '#/components/parameters/device'
+      - $ref: '#/components/parameters/alias'
+    post:
+      summary: Create a new item
+      description: Create a new item under path denoted by alias
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+      responses:
+        '201':
+          description: Created item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+      operationId: createItem
+      tags:
+        - data
+    get:
+      summary: List all items under path
+      description: List items under path denoted by alias
+      responses:
+        '200':
+          description: List of items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemList'
+      operationId: listItems
+      tags:
+        - data
+  /data/{device}/{alias}/{id}:
+    parameters:
+      - $ref: '#/components/parameters/device'
+      - $ref: '#/components/parameters/alias'
+      - $ref: '#/components/parameters/id'
+    get:
+      summary: Get a single item
+      description: Get a single item under path denoted by alias and its ID.
+      responses:
+        '200':
+          description: Item content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+      operationId: getItem
+      tags:
+        - data
+
+    delete:
+      summary: Delete a single item
+      description: Delete a single item under path denoted by alias and its ID.
+      responses:
+        '204':
+          description: Item was deleted
+
+      operationId: deleteItem
+      tags:
+        - data
+    patch:
+      summary: Update properties of single item
+      description: Update one or more properties of single item under path denoted by alias and its ID.
+      responses:
+        '200':
+          description: Updated item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+      operationId: patchItem
+      tags:
+        - data
+components:
+  parameters:
+    device:
+      name: device
+      in: path
+      required: true
+      description: Name of device
+      schema:
+        type: string
+        pattern: '[\w_-]+'
+        minLength: 1
+        maxLength: 63
+    alias:
+      name: alias
+      in: path
+      required: true
+      description: Name of alias
+      schema:
+        type: string
+        pattern: '[\w_-]+'
+        minLength: 1
+        maxLength: 63
+    id:
+      name: id
+      in: path
+      required: true
+      description: ID of entry
+      schema:
+        type: string
+        pattern: '[\w_-]+'
+        minLength: 1
+        maxLength: 63
+  schemas:
+    ItemList:
+      description: List of items
+      type: array
+      items:
+        $ref: "#/components/schemas/Item"
+    DeviceList:
+      description: List of names
+      type: array
+      items:
+        $ref: '#/components/schemas/DeviceDetail'
+    DeviceTlsConfig:
+      description: Device TLS configuration. When not present, TLS won't be used
+      type: object
+      required:
+        - verify
+      properties:
+        verify:
+          description: whether a client verifies the server's certificate chain and host name.
+          type: boolean
+          default: false
+        ca:
+          description: Path to CA certificate
+          type: string
+    DeviceDetail:
+      type: object
+      description: Device detail
+      properties:
+        name:
+          description: Device symbolic name
+          type: string
+          readOnly: true
+        timeout:
+          description: Connection timeout in seconds
+          type: number
+        username:
+          type: string
+        password:
+          type: string
+        address:
+          description: |
+            Device address in form of <host/IP>:<port>, such as "192.168.0.20:1234"
+          type: string
+        tls:
+          $ref: '#/components/schemas/DeviceTlsConfig'
+      required:
+        - username
+        - password
+        - address
+    AliasDetail:
+      type: object
+      description: Alias detail
+      required:
+        - path
+      properties:
+        name:
+          description: Alias name
+          type: string
+          readOnly: true
+        path:
+          description: ROSAPI path within device
+          type: string
+        create:
+          description: Whether create is allowed underneath this alias
+          default: false
+          type: boolean
+        update:
+          description: Whether update is allowed underneath this alias
+          default: false
+          type: boolean
+        delete:
+          description: Whether delete is allowed underneath this alias
+          default: false
+          type: boolean
+    AliasList:
+      description: List of aliases
+      type: array
+      items:
+        $ref: '#/components/schemas/AliasDetail'
+    Item:
+      description: Dictionary of name-to-value.
+      type: object
+      additionalProperties:
+        type: string
