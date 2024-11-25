@@ -25,7 +25,7 @@ require (
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/prometheus/common v0.60.1
 	github.com/samber/lo v1.47.0
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	gopkg.in/routeros.v2 v2.0.0-20190905230420-1bbf141cdd91
 	gopkg.in/yaml.v3 v3.0.1
 )
