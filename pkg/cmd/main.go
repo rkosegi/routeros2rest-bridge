@@ -22,9 +22,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/prometheus/common/promslog"
 	"github.com/rkosegi/routeros2rest-bridge/pkg/server"
 	"github.com/rkosegi/routeros2rest-bridge/pkg/types"
+	xlog "github.com/rkosegi/slog-config"
 	"gopkg.in/yaml.v3"
 )
 
@@ -34,19 +34,14 @@ func main() {
 		err     error
 		cfg     *types.Config
 	)
-	pc := &promslog.Config{
-		Level:  &promslog.AllowedLevel{},
-		Format: &promslog.AllowedFormat{},
-		Style:  promslog.GoKitStyle,
-	}
-	_ = pc.Level.Set("info")
-	_ = pc.Format.Set("logfmt")
+	sc := xlog.MustNew("info", xlog.LogFormatLogFmt)
 	flag.StringVar(&cfgFile, "config", "config.yaml", "config file")
-	flag.Var(pc.Level, "log-level", "log level")
-	flag.Var(pc.Format, "log-format", "log format")
+	flag.Var(&sc.Level, "log-level", "log level")
+	flag.Var(&sc.Format, "log-format", "log format")
 	flag.Parse()
-	logger := promslog.New(pc)
+	logger := sc.Logger()
 
+	logger.Debug("loading config", "file", cfgFile)
 	if cfg, err = loadConfig(cfgFile); err != nil {
 		logger.Error("error loading config", "error", err)
 		os.Exit(1)
