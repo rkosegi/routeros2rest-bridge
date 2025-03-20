@@ -20,7 +20,7 @@ toolchain go1.24.1
 
 require (
 	dario.cat/mergo v1.0.1
-	github.com/getkin/kin-openapi v0.130.0
+	github.com/getkin/kin-openapi v0.131.0
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
