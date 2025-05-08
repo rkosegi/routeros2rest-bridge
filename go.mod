@@ -19,7 +19,7 @@ go 1.23.0
 toolchain go1.24.1
 
 require (
-	dario.cat/mergo v1.0.1
+	dario.cat/mergo v1.0.2
 	github.com/getkin/kin-openapi v0.132.0
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
