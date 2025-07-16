@@ -22,7 +22,7 @@ require (
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
-	github.com/oapi-codegen/runtime v1.1.1
+	github.com/oapi-codegen/runtime v1.1.2
 	github.com/rkosegi/slog-config v0.0.0-20241127060841-1e662733c9c0
 	github.com/samber/lo v1.51.0
 	github.com/stretchr/testify v1.10.0
