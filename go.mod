@@ -26,7 +26,7 @@ require (
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
 	github.com/oapi-codegen/runtime v1.1.2
-	github.com/rkosegi/go-http-commons v0.0.0-20250906031959-9700ab235909
+	github.com/rkosegi/go-http-commons v0.0.0-20250907115558-b14861189f94
 	github.com/rkosegi/slog-config v0.0.0-20250905141651-b1a42e4b0a6b
 	github.com/samber/lo v1.51.0
 	github.com/stretchr/testify v1.11.1

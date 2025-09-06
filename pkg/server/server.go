@@ -53,7 +53,7 @@ func (rs *rest) Close() error {
 }
 
 func (rs *rest) Init() {
-	rs.logger.Info("initializing server", "address", rs.cfg.Server.HTTPListenAddress)
+	rs.logger.Info("initializing server", "address", rs.cfg.Server.ListenAddress)
 	rs.devices = lo.Map(lo.Values(rs.cfg.Devices), func(dev *api.DeviceDetail, _ int) *api.DeviceDetail {
 		return &api.DeviceDetail{
 			Username: dev.Username,
@@ -66,7 +66,7 @@ func (rs *rest) Init() {
 	r.HandleFunc("/spec/opeanapi.v1.json", openapi.SpecHandler(api.PathToRawSpec))
 
 	rs.server = &http.Server{
-		Addr: rs.cfg.Server.HTTPListenAddress,
+		Addr: rs.cfg.Server.ListenAddress,
 		Handler: handlers.CORS(
 			handlers.AllowedMethods([]string{
 				http.MethodGet,
@@ -74,8 +74,8 @@ func (rs *rest) Init() {
 				http.MethodPut,
 				http.MethodDelete,
 			}),
-			handlers.AllowedOrigins(rs.cfg.Server.CorsConfig.AllowedOrigins),
-			handlers.MaxAge(rs.cfg.Server.CorsConfig.MaxAge),
+			handlers.AllowedOrigins(rs.cfg.Server.Cors.AllowedOrigins),
+			handlers.MaxAge(rs.cfg.Server.Cors.MaxAge),
 			handlers.AllowedHeaders([]string{"Content-Type"}),
 		)(api.HandlerWithOptions(rs, api.GorillaServerOptions{
 			BaseURL:    "/api/v1",
@@ -94,14 +94,7 @@ func (rs *rest) Run() (err error) {
 	defer func(rs *rest) {
 		_ = rs.Close()
 	}(rs)
-	if rs.cfg.Server.HTTPTLSConfig != nil {
-		return rs.server.ListenAndServeTLS(
-			rs.cfg.Server.HTTPTLSConfig.TLSCertPath,
-			rs.cfg.Server.HTTPTLSConfig.TLSKeyPath,
-		)
-	} else {
-		return rs.server.ListenAndServe()
-	}
+	return rs.cfg.Server.RunForever(rs.server)
 }
 
 type Opt func(*rest)

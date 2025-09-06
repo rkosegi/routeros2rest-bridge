@@ -21,6 +21,7 @@ import (
 	"fmt"
 
 	"dario.cat/mergo"
+	ccfg "github.com/rkosegi/go-http-commons/config"
 	"github.com/rkosegi/routeros2rest-bridge/pkg/api"
 )
 
@@ -35,9 +36,9 @@ var (
 		Update: &vFalse,
 		Delete: &vFalse,
 	}
-	defServerConfig = ServerConfig{
-		HTTPListenAddress: "0.0.0.0:22003",
-		CorsConfig: &CorsConfig{
+	defServerConfig = ccfg.ServerConfig{
+		ListenAddress: "0.0.0.0:22003",
+		Cors: &ccfg.CorsConfig{
 			// if you run this in default config, you most likely come from
 			// different origin then http://localhost:22003 (or whatever address is this running on).
 			// Be sure to set something sane to fit your deployment.
@@ -47,26 +48,8 @@ var (
 	}
 )
 
-type TLSConfig struct {
-	TLSCertPath string `yaml:"cert_file"`
-	TLSKeyPath  string `yaml:"key_file"`
-	ClientAuth  string `yaml:"client_auth_type"`
-	ClientCAs   string `yaml:"client_ca_file"`
-}
-
-type CorsConfig struct {
-	AllowedOrigins []string `yaml:"allowed_origins"`
-	MaxAge         int      `yaml:"max_age"`
-}
-
-type ServerConfig struct {
-	HTTPListenAddress string      `yaml:"http_listen_address"`
-	HTTPTLSConfig     *TLSConfig  `yaml:"http_tls_config"`
-	CorsConfig        *CorsConfig `yaml:"cors"`
-}
-
 type Config struct {
-	Server  ServerConfig `yaml:"server"`
+	Server  ccfg.ServerConfig `yaml:"server"`
 	Aliases map[string]*api.AliasDetail
 	Devices map[string]*api.DeviceDetail
 }
@@ -107,5 +90,5 @@ func (c *Config) Normalize() error {
 			return err
 		}
 	}
-	return nil
+	return c.Server.Check()
 }
