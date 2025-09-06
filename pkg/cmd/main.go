@@ -36,8 +36,7 @@ func main() {
 	)
 	sc := xlog.MustNew("info", xlog.LogFormatLogFmt)
 	flag.StringVar(&cfgFile, "config", "config.yaml", "config file")
-	flag.Var(&sc.Level, "log-level", "log level")
-	flag.Var(&sc.Format, "log-format", "log format")
+	sc.AddFlags(flag.CommandLine)
 	flag.Parse()
 	logger := sc.Logger()
 

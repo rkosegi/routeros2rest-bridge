@@ -20,10 +20,9 @@ repos:
       - id: check-merge-conflict
       - id: end-of-file-fixer
       - id: mixed-line-ending
-  - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.30
+  - repo: https://github.com/tekwizely/pre-commit-golang
+    rev: v1.0.0-rc.2
     hooks:
-      # - id: golangci-lint
-      - id: goimports
-      - id: gofmt
-      # - id: helmlint
+      - id: go-mod-tidy
+      - id: go-fmt
+      - id: go-imports
