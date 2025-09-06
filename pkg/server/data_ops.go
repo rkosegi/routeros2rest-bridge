@@ -57,7 +57,7 @@ func (rs *rest) doGetById(cl *routeros.Client, path, id string, w http.ResponseW
 		if len(re.Re) == 0 {
 			http.NotFound(w, r)
 		} else {
-			sendJsonWithStatus(w, re.Re[0].Map, validResponse)
+			out.SendWithStatus(w, re.Re[0].Map, validResponse)
 		}
 	}); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

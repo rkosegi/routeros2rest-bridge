@@ -24,6 +24,8 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/rkosegi/go-http-commons/middlewares"
+	"github.com/rkosegi/go-http-commons/openapi"
 	"github.com/rkosegi/routeros2rest-bridge/pkg/types"
 	"github.com/samber/lo"
 
@@ -50,18 +52,6 @@ func (rs *rest) Close() error {
 	return rs.server.Close()
 }
 
-func (rs *rest) specHandler() func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		if data, err := api.PathToRawSpec(r.URL.Path)[r.URL.Path](); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		} else {
-			w.Header().Set("Content-Type", "application/json")
-			_, _ = w.Write(data)
-		}
-	}
-}
-
 func (rs *rest) Init() {
 	rs.logger.Info("initializing server", "address", rs.cfg.Server.HTTPListenAddress)
 	rs.devices = lo.Map(lo.Values(rs.cfg.Devices), func(dev *api.DeviceDetail, _ int) *api.DeviceDetail {
@@ -73,7 +63,7 @@ func (rs *rest) Init() {
 		}
 	})
 	r := mux.NewRouter()
-	r.HandleFunc("/spec/opeanapi.v1.json", rs.specHandler())
+	r.HandleFunc("/spec/opeanapi.v1.json", openapi.SpecHandler(api.PathToRawSpec))
 
 	rs.server = &http.Server{
 		Addr: rs.cfg.Server.HTTPListenAddress,
@@ -91,7 +81,7 @@ func (rs *rest) Init() {
 			BaseURL:    "/api/v1",
 			BaseRouter: r,
 			Middlewares: []api.MiddlewareFunc{
-				loggingMiddleware(rs.logger.With("type", "access log")),
+				middlewares.NewLoggingBuilder().WithLogger(rs.logger).Build(),
 			},
 		})),
 		ReadTimeout:  30 * time.Second,

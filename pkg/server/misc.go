@@ -22,12 +22,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log/slog"
 	"net"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/rkosegi/go-http-commons/output"
 	"github.com/rkosegi/routeros2rest-bridge/pkg/api"
 	"github.com/samber/lo"
 	"gopkg.in/routeros.v2"
@@ -40,32 +40,14 @@ const (
 
 var (
 	ErrCaAppend = errors.New("failed to append root CA certificate")
+	out         = output.NewBuilder().Build()
 )
 
 type PathHandler func(dev *api.DeviceDetail, alias *api.AliasDetail, w http.ResponseWriter, r *http.Request)
 type ItemHandler func(dev *api.DeviceDetail, alias *api.AliasDetail, id string, w http.ResponseWriter, r *http.Request)
 
 func sendJson(w http.ResponseWriter, v interface{}) {
-	sendJsonWithStatus(w, v, http.StatusOK)
-}
-
-func sendJsonWithStatus(w http.ResponseWriter, v interface{}, status int) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-	err := json.NewEncoder(w).Encode(v)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		_, _ = w.Write([]byte(err.Error()))
-	}
-}
-
-func loggingMiddleware(logger *slog.Logger) api.MiddlewareFunc {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			logger.Debug("http req", "method", r.Method, "path", r.URL.Path, "user-agent", r.Header.Get("User-Agent"))
-			next.ServeHTTP(w, r)
-		})
-	}
+	out.SendWithStatus(w, v, http.StatusOK)
 }
 
 func (rs *rest) openConnection(dev *api.DeviceDetail) (net.Conn, error) {
