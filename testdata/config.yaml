@@ -1,4 +1,4 @@
-# Copyright 2024 Richard Kosegi
+# Copyright 2025 Richard Kosegi
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,7 +11,29 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-/config.yaml
-.idea
-dist
-.run
+---
+server:
+  listen_address: 0.0.0.0:22003
+  cors:
+    allowed_origins: ["*"]
+    max_age: 1200
+aliases:
+  arp:
+    path: /ip/arp
+  interfaces:
+    path: /interface
+  system-packages:
+    path: /system/packages
+  user:
+    path: /user
+  dhcp-leases:
+    path: /ip/dhcp-server/lease
+  wireless-client:
+    path: /interface/wireless/registration-table
+devices:
+  rb2011u:
+    username: my-user
+    password: my-secret
+    address: RB2011-bld3:8729
+    tls:
+      verify: true

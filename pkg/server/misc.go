@@ -114,7 +114,8 @@ func (rs *rest) withDevice(dev *api.DeviceDetail, fn func(*routeros.Client) erro
 		return err
 	}
 	defer func() {
-		rs.logger.Debug("closing client connection", "remote", conn.RemoteAddr(), "local", conn.LocalAddr())
+		rs.logger.Debug("closing client connection",
+			"remote", conn.RemoteAddr().String(), "local", conn.LocalAddr().String())
 		cl.Close()
 	}()
 	return fn(cl)

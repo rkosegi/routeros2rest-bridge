@@ -20,6 +20,13 @@ repos:
       - id: check-merge-conflict
       - id: end-of-file-fixer
       - id: mixed-line-ending
+  - repo: https://github.com/santhosh-tekuri/jsonschema
+    rev: v6.0.2
+    hooks:
+      - id: jsonschema-validate
+        files: testdata/config.*\.yaml
+        args:
+          - schemas/config.schema.json
   - repo: https://github.com/tekwizely/pre-commit-golang
     rev: v1.0.0-rc.2
     hooks:

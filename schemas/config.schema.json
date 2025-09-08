@@ -1,0 +1,96 @@
+{
+  "$defs": {
+    "config": {
+      "additionalProperties": false,
+      "properties": {
+        "server": {
+          "$ref": "https://raw.githubusercontent.com/rkosegi/go-http-commons/refs/heads/main/schemas/server.config.json"
+        },
+        "devices": {
+          "additionalProperties": {
+            "$ref": "#/$defs/deviceSpec"
+          }
+        },
+        "aliases": {
+          "description": "Command aliases",
+          "additionalProperties": {
+            "$ref": "#/$defs/aliasSpec"
+          }
+        }
+      }
+    },
+    "deviceSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "username": {
+          "description": "User for login",
+          "type": "string"
+        },
+        "password": {
+          "description": "Password for login",
+          "type": "string"
+        },
+        "address": {
+          "description": "Hostname or IP address and port to connect to",
+          "type": "string"
+        },
+        "tls": {
+          "allOf": [
+            {
+              "description": "Presence of this property signifies use of TLS to connect to device"
+            },
+            {
+              "$ref": "#/$defs/deviceTlsConfig"
+            }
+          ]
+        }
+      }
+    },
+    "deviceTlsConfig": {
+      "description": "Device TLS configuration",
+      "type": "object",
+      "properties": {
+        "verify": {
+          "description": "whether a client verifies the server's certificate chain and host name.",
+          "type": "boolean"
+        },
+        "ca": {
+          "description": "Path to CA certificate",
+          "type": "string"
+        }
+      },
+      "required": [
+        "verify"
+      ]
+    },
+    "aliasSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "description": "ROSAPI path within the device",
+          "type": "string"
+        },
+        "create": {
+          "description": "Whether 'add' is allowed underneath this alias",
+          "type": "boolean"
+        },
+        "delete": {
+          "description": "Whether 'delete' is allowed underneath this alias",
+          "type": "boolean"
+        },
+        "update": {
+          "description": "Whether 'update' is allowed underneath this alias",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "path"
+      ]
+    }
+  },
+  "$id": "https://github.com/rkosegi/routeros2rest-bridge/schemas/config",
+  "$ref": "#/$defs/config",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "RouterOS 2 REST bridge configuration schema",
+  "type": "object"
+}
