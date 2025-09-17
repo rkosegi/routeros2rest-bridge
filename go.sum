@@ -96,8 +96,8 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/prometheus/common v0.66.0 h1:K/rJPHrG3+AoQs50r2+0t7zMnMzek2Vbv31OFVsMeVY=
 github.com/prometheus/common v0.66.0/go.mod h1:Ux6NtV1B4LatamKE63tJBntoxD++xmtI/lK0VtEplN4=
-github.com/rkosegi/go-http-commons v0.0.0-20250907115558-b14861189f94 h1:2oqJun5khAL9f8IEVsJH3ZeXHWOuDGabJAayGdy6WNA=
-github.com/rkosegi/go-http-commons v0.0.0-20250907115558-b14861189f94/go.mod h1:qp/llW3hlqzpcGlkMFtY/BLjdk+54AnBydz3Gyqn/0c=
+github.com/rkosegi/go-http-commons v0.0.1 h1:jskLIaEm0sMRdSrrrWHs41s4enHku46kimXbsreD/f0=
+github.com/rkosegi/go-http-commons v0.0.1/go.mod h1:qp/llW3hlqzpcGlkMFtY/BLjdk+54AnBydz3Gyqn/0c=
 github.com/rkosegi/slog-config v0.0.0-20250905141651-b1a42e4b0a6b h1:HZ+KS/xoCHAviKYdu7oZ0g8TZ83mLPCojt3CripdjvI=
 github.com/rkosegi/slog-config v0.0.0-20250905141651-b1a42e4b0a6b/go.mod h1:fjpVpbBsrB2gbt7/wBpQI4i4QThr69PMZBTcw1O0ovU=
 github.com/rogpeppe/go-internal v1.12.0 h1:exVL4IDcn6na9z1rAb56Vxr+CgyK3nn3O+epU5NdKM8=
