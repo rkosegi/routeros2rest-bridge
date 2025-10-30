@@ -63,7 +63,7 @@ func (rs *rest) Init() {
 		}
 	})
 	r := mux.NewRouter()
-	r.HandleFunc("/spec/opeanapi.v1.json", openapi.SpecHandler(api.PathToRawSpec))
+	r.HandleFunc("/spec/openapi.v1.json", openapi.SpecHandler(api.PathToRawSpec))
 
 	rs.server = &http.Server{
 		Addr: rs.cfg.Server.ListenAddress,
