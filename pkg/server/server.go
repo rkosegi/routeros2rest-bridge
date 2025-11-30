@@ -64,6 +64,9 @@ func (rs *rest) Init() {
 	})
 	r := mux.NewRouter()
 	r.HandleFunc("/spec/openapi.v1.json", openapi.SpecHandler(api.PathToRawSpec))
+	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte("OK\n"))
+	})
 
 	rs.server = &http.Server{
 		Addr: rs.cfg.Server.ListenAddress,
