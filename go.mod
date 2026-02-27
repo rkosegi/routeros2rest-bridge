@@ -25,7 +25,7 @@ require (
 	github.com/getkin/kin-openapi v0.133.0
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
-	github.com/oapi-codegen/runtime v1.1.2
+	github.com/oapi-codegen/runtime v1.2.0
 	github.com/rkosegi/go-http-commons v0.0.2
 	github.com/rkosegi/slog-config v0.0.1
 	github.com/samber/lo v1.52.0
