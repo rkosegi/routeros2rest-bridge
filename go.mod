@@ -14,7 +14,7 @@
 
 module github.com/rkosegi/routeros2rest-bridge
 
-go 1.26
+go 1.26.0
 
 tool github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen
 
@@ -23,7 +23,7 @@ require (
 	github.com/getkin/kin-openapi v0.153.0
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
-	github.com/oapi-codegen/runtime v1.8.0
+	github.com/oapi-codegen/runtime v1.9.0
 	github.com/rkosegi/go-http-commons v0.0.4
 	github.com/rkosegi/slog-config v0.0.1
 	github.com/samber/lo v1.53.0
